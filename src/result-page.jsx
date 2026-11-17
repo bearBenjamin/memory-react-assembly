@@ -1,4 +1,3 @@
-import React from 'react';
 import getDeclension from '@dubaua/get-declension';
 
 export function ResultsPage({ stepsCount, results, onResetGame }) {
