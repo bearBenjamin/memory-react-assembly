@@ -1,16 +1,15 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  // 1. Поправили output: добавили путь к папке dist и заменили '/' на './' для GitHub Pages
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: './',
     filename: 'bundle.js',
-    clean: true, // Очищает старые файлы в dist перед новой сборкой
+    clean: true,
   },
   entry: './src/index.js',
-  // 2. Добавили resolve, чтобы Webpack находил импорты .jsx без указания расширения
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -34,6 +33,18 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'public/index.html',
+    }),
+    // Копируем все файлы (картинки, стили, шрифты) из public в dist
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public',
+          to: '.',
+          globOptions: {
+            ignore: ['**/index.html'], // Игнорируем index.html, так как его создает HtmlWebpackPlugin
+          },
+        },
+      ],
     }),
   ],
   devtool: 'inline-source-map',
