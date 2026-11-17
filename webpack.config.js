@@ -1,3 +1,7 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+
 module.exports = (env, argv) => {
   const isDev = argv.mode === 'development';
 
@@ -25,8 +29,8 @@ module.exports = (env, argv) => {
                 [
                   '@babel/preset-react',
                   {
-                    runtime: 'automatic', // Позволяет НЕ писать import React from 'react'
-                    development: isDev,   // Решает ошибку с jsxDEV на проде
+                    runtime: 'automatic',
+                    development: isDev,
                   },
                 ],
               ],
@@ -35,7 +39,30 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    // ... остальные секции (plugins, devServer) без изменений ...
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: 'public/index.html',
+      }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: 'public',
+            to: '.',
+            globOptions: {
+              ignore: ['**/index.html'],
+            },
+          },
+        ],
+      }),
+    ],
     devtool: isDev ? 'inline-source-map' : false,
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'public'),
+      },
+      historyApiFallback: true,
+      open: true,
+      hot: true,
+    },
   };
 };
