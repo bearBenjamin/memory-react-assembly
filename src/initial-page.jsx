@@ -1,3 +1,4 @@
+import React from 'react';
 import { GAME_TYPES } from "./settings.js";
 
 export function InitialPage({onStart}) {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function Card({ item, isVisible, isFinished, onCardClick }) {
       const { id, url, description } = item;
       const className = `${isVisible ? 'card-show' : ''
